@@ -5,7 +5,6 @@ COPY package.json .
 RUN npm i --production
 COPY server.js .
 COPY swagger.json .
-COPY .env .env
 
 EXPOSE 8080
 CMD [ "node", "server.js" ]
