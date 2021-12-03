@@ -2,16 +2,19 @@
   "name": "gdx-agreements-tracker-api",
   "version": "1.0.0",
   "description": "GDX Agreements Tracker API",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "mocha",
-    "start": "NODE_ENV=development nodemon server.js"
+    "start": "NODE_ENV=development nodemon src/server.js"
   },
   "keywords": [
     "api",
     "gdx",
     "agreements tracker"
   ],
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "author": "Shawn Turple",
   "license": "Apache-2.0",
   "dependencies": {
