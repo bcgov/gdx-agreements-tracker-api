@@ -62,7 +62,7 @@ objects:
   - kind: Deployment
     apiVersion: apps/v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}-deployment
+      name: ${APP_NAME}-${ROLE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         image.openshift.io/triggers: >-
@@ -84,6 +84,7 @@ objects:
             app: ${APP_NAME}
             role: ${ROLE_NAME}
             env: ${ENV_NAME}
+            app.kubernetes.io/part-of: ${APP_NAME}-${ROLE_NAME}
         spec:
           containers:
             - name: ${APP_NAME}-${ROLE_NAME}

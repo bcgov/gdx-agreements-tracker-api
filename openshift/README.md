@@ -27,3 +27,19 @@ oc project ${OC_NAMESPACE}-tools
 
 oc process -f templates/api/build.yaml -p GIT_REF="development" | oc apply -f -
 ```
+
+Initialize the API deployment.
+```bash
+export OC_NAMESPACE="acd38d"
+oc project ${OC_NAMESPACE}-tools
+
+oc process -f templates/api/deploy.yaml  | oc apply -f -
+```
+
+Stand up the API routes.
+```bash
+export OC_NAMESPACE="acd38d"
+oc project ${OC_NAMESPACE}-tools
+
+oc process -f templates/api/deploy-route.yaml  | oc apply -f -
+```
