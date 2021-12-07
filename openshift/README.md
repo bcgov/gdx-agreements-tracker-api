@@ -4,67 +4,35 @@ Make sure the workspace can use the artifactory docker remote proxy.
 oc secrets link default artifactory-docker-remote-creds --for=pull
 ```
 
-Bring dockerhub node images in as openshift imagestreams.
 ```bash
 export OC_NAMESPACE="acd38d"
 oc project ${OC_NAMESPACE}-tools
 
+# Bring dockerhub node images in as openshift imagestreams.
 oc process -f templates/base-images/node-16.yaml | oc apply -f -
 oc process -f templates/base-images/postgres-14.yaml | oc apply -f -
-```
 
-S2I-ize node-16 for openshift. These are the basic node build and runtime images.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
-
+# S2I-ize node-16 for openshift. These are the basic node build and runtime images.
 oc process -f s2i/nodejs/nodejs.yaml -p GIT_REF="development" | oc apply -f -
-```
 
-Build the api base image, and runtime image.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
-
+# Build the api base image, and runtime image.
 oc process -f templates/api/build.yaml -p GIT_REF="development" | oc apply -f -
-```
 
-Initialize the API deployment.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
-
+# Initialize the API container deployment.
 oc process -f templates/api/deploy.yaml | oc apply -f -
-```
 
-Stand up the API routes.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
-
+# Stand up the API routes.
 oc process -f templates/api/deploy-route.yaml | oc apply -f -
-```
 
-Build the PostgreSQL containers.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
-
-oc process -f templates/posgres/build.yaml | oc apply -f -
-```
-
-Configure the PostgreSQL deployment.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
-
+# Configure the PostgreSQL deployment.
 oc process -f templates/postgres/config.yaml -p POSTGRES_REGULAR_USER_PASSWORD=changeTHISstring -p POSTGRES_ROOT_PASSWORD=changeTHISstringTOO | oc apply -f -
-```
 
-PostgreSQL deployment.
-```bash
-export OC_NAMESPACE="acd38d"
-oc project ${OC_NAMESPACE}-tools
+# PostgreSQL persistent storage setup.
+oc process -f templates/postgres/deploy.yaml | oc apply -f -
 
+# Build the PostgreSQL containers.
+oc process -f templates/posgres/build.yaml | oc apply -f -
+
+# PostgreSQL deployment.
 oc process -f templates/postgres/deploy.yaml | oc apply -f -
 ```

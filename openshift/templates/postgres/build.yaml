@@ -1,10 +1,10 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: gdx-agreements-tracker-api-build
+  name: gdx-agreements-tracker-postgres-build
   annotations:
-    openshift.io/display-name: API node build
-    description: Build template for Node build
+    openshift.io/display-name: API PostgreSQL build
+    description: Build template for PostgreSQL build
     tags: pmo,api,gdx,agreements-tracker
 parameters:
   - name: APP_NAME

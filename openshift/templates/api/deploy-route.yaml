@@ -4,8 +4,8 @@ metadata:
   name: gdx-agreements-tracker-api-routes
   resourceVersion: "v1.0.0"
   annotations:
-    openshift.io/display-name: Deployment routes - GDX agreements tracker app.
-    description: Deployment routes for GDX agreements tracker app.
+    openshift.io/display-name: Deployment routes - GDX agreements tracker API.
+    description: Deployment routes for GDX agreements tracker API.
     tags: pmo,api,gdx,agreements-tracker,routes,deployment
 parameters:
   - name: APP_NAME

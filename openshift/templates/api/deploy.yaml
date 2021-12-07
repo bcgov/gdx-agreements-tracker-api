@@ -28,6 +28,12 @@ parameters:
     description: "The name for this environment [dev, test, prod, tools]"
     required: true
     value: "dev"
+  - name: DEPLOYMENT_TAG
+    displayName: "Deployment tag"
+    description: "Deployment tag on the runtime ImageStream"
+    required: true
+    value: "dev"
+
 
   - name: INSTANCE
     displayName: "Unique Identifier"
@@ -66,7 +72,7 @@ objects:
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         image.openshift.io/triggers: >-
-          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-${ROLE_NAME}-deploy:dev","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}\")].image"}]
+          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-${ROLE_NAME}-deploy:${DEPLOYMENT_TAG}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}\")].image"}]
     spec:
       replicas: ${{REPLICAS}}
       selector:
@@ -88,7 +94,7 @@ objects:
         spec:
           containers:
             - name: ${APP_NAME}-${ROLE_NAME}
-              image: ${APP_NAME}-${ROLE_NAME}-deploy:dev
+              image: ${APP_NAME}-${ROLE_NAME}-deploy:${DEPLOYMENT_TAG}
               ports:
                 - containerPort: ${{APP_PORT}}
                   protocol: TCP
