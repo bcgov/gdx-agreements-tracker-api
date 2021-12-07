@@ -44,3 +44,11 @@ oc project ${OC_NAMESPACE}-tools
 
 oc process -f templates/api/deploy-route.yaml | oc apply -f -
 ```
+
+Build the PostgreSQL containers
+```bash
+export OC_NAMESPACE="acd38d"
+oc project ${OC_NAMESPACE}-tools
+
+oc process -f templates/posgres/build.yaml | oc apply -f -
+```
