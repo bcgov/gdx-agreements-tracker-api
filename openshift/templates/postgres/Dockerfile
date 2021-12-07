@@ -16,10 +16,13 @@ RUN set -ex; \
     mkdir -p /var/lib/postgresql/data ; \
     chown -R 0:0 /var/lib/postgresql ; \
     chmod -R 775 /var/lib/postgresql ; \
+    mkdir -p /var/run ; \
+    chown -R 0:0 /var/run ; \
+    chmod -R 775 /var/run ; \
     deluser postgres; \
     apk del tar
 
 VOLUME /var/lib/postgresql
-VOLUME /var/run/postgresql
+VOLUME /var/run
 
 
