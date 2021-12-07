@@ -44,7 +44,7 @@ parameters:
   - name: POSTGRES_ROOT_USER
     displayName: "POSTGRES_USER"
     description: "The database superuser account name."
-    value: "pmouser"
+    value: "postgres"
   - name: POSTGRES_ROOT_PASSWORD
     displayName: "POSTGRES_PASSWORD"
     description: "Superuser password."

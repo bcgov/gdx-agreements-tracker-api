@@ -68,6 +68,8 @@ objects:
           app: ${APP_NAME}
           role: ${ROLE_NAME}
           env: ${ENV_NAME}
+      strategy:
+        type: Recreate
       template:
         metadata:
           annotations:
