@@ -15,7 +15,7 @@ RUN set -ex; \
     chmod 775 /etc ; \
     mkdir -p /var/lib/postgresql/data ; \
     chown -R 0:0 /var/lib/postgresql ; \
-    chmod -R 775 /var/lib/postgresql/datal ; \
+    chmod -R 775 /var/lib/postgresql ; \
     deluser postgres; \
     apk del tar
 
