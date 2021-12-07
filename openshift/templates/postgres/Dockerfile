@@ -2,9 +2,6 @@ FROM postgres:14-bullseye
 
 ENV RUNUSER postgres
 
-# Add docker-entrypoint script base
-COPY docker-entrypoint.tar.gz /docker-entrypoint.tar.gz
-
 RUN set -ex; \
     chmod -R 555 /docker-entrypoint.* ; \
     chmod 664 /etc/passwd /etc/group /etc/shadow ; \
