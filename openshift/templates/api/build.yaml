@@ -165,6 +165,8 @@ objects:
         role: ${ROLE_NAME}
         env: ${ENV_NAME}
     spec:
+      successfulBuildsHistoryLimit: 2
+      failedBuildsHistoryLimit: 2
       runPolicy: Parallel
       completionDeadlineSeconds: 1800
       triggers:

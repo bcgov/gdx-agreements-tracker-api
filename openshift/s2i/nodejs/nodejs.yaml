@@ -79,6 +79,8 @@ objects:
       dockerStrategy:
         forcePull: true
     spec:
+      successfulBuildsHistoryLimit: 2
+      failedBuildsHistoryLimit: 2
       runPolicy: Serial
       source:
         type: Git

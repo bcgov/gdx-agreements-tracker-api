@@ -10,6 +10,7 @@ export OC_NAMESPACE="acd38d"
 oc project ${OC_NAMESPACE}-tools
 
 oc process -f templates/base-images/node-16.yaml | oc apply -f -
+oc process -f templates/base-images/postgres-14.yaml | oc apply -f -
 ```
 
 S2I-ize node-16 for openshift. These are the basic node build and runtime images.
@@ -33,7 +34,7 @@ Initialize the API deployment.
 export OC_NAMESPACE="acd38d"
 oc project ${OC_NAMESPACE}-tools
 
-oc process -f templates/api/deploy.yaml  | oc apply -f -
+oc process -f templates/api/deploy.yaml | oc apply -f -
 ```
 
 Stand up the API routes.
@@ -41,5 +42,5 @@ Stand up the API routes.
 export OC_NAMESPACE="acd38d"
 oc project ${OC_NAMESPACE}-tools
 
-oc process -f templates/api/deploy-route.yaml  | oc apply -f -
+oc process -f templates/api/deploy-route.yaml | oc apply -f -
 ```
