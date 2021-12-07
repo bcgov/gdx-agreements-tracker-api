@@ -13,12 +13,13 @@ RUN set -ex; \
     chmod 664 /etc/passwd /etc/group /etc/shadow ; \
     chown 0:0 /etc/shadow ; \
     chmod 775 /etc ; \
-    mkdir -p /var/lib/pgsql/data ; \
-    chown -R 0:0 /var/lib/pgsql ; \
-    chmod -R 775 /var/lib/pgsql ; \
+    mkdir -p /var/lib/postgresql/data ; \
+    chown -R 0:0 /var/lib/postgresql ; \
+    chmod -R 775 /var/lib/postgresql/datal ; \
     deluser postgres; \
     apk del tar
 
-VOLUME /var/lib/pgsql
+VOLUME /var/lib/postgresql
+VOLUME /var/run/postgresql
 
 
