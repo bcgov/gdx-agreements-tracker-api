@@ -5,7 +5,7 @@ metadata:
   annotations:
     openshift.io/display-name: API node build
     description: Build template for Node build
-    tags: gdx-agreements-tracker,api
+    tags: pmo,api,gdx,agreements-tracker
 parameters:
   - name: APP_NAME
     displayName: "App Name"
@@ -39,11 +39,11 @@ parameters:
 
   - name: RUNTIMEIMAGE_NAME
     displayName: "Source Image Name"
-    description: "The image to use as the Builder Image."
+    description: "The image to use as the Runtime Image."
     value: "nodejs-16"
   - name: RUNTIMEIMAGE_TAG
     displayName: "Source Image Tag"
-    description: "The s2i image tag which is used to build the code."
+    description: "The s2i image tag which is used to run the code."
     value: "latest"
 
   - name: GIT_URL
@@ -66,7 +66,7 @@ parameters:
     displayName: "Output Image Tag"
     description: "The tag given to the built image."
     required: true
-    value: "latest"
+    value: "dev"
 
   - name: CPU_LIMIT
     displayName: "Resources CPU Limit"
@@ -82,29 +82,29 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}-base
+      name: ${APP_NAME}-${ROLE_NAME}-build
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         description: Keeps track of changes to the intermediate frontend artifacts image
-    labels:
-      name: ${APP_NAME}-${ROLE_NAME}-base
-      app: ${APP_NAME}
-      role: ${ROLE_NAME}
-      env: ${ENV_NAME}
+      labels:
+        name: ${APP_NAME}-${ROLE_NAME}-build
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
 
   # The build config that will be created and be named for the branch you created it for.
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}-base.${GIT_REF}
+      name: ${APP_NAME}-${ROLE_NAME}-build.${GIT_REF}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         description: Intermediate build that generates artifacts (html, javascript, images, etc)
-    labels:
-      name: ${APP_NAME}-${ROLE_NAME}-base.${GIT_REF}
-      app: ${APP_NAME}
-      role: ${ROLE_NAME}
-      env: ${ENV_NAME}
+      labels:
+        name: ${APP_NAME}-${ROLE_NAME}-build.${GIT_REF}
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
     spec:
       runPolicy: Parallel
       completionDeadlineSeconds: 1800
@@ -127,7 +127,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: ${APP_NAME}-${ROLE_NAME}-base:${OUTPUT_IMAGE_TAG}
+          name: ${APP_NAME}-${ROLE_NAME}-build:${OUTPUT_IMAGE_TAG}
       resources:
         limits:
           cpu: ${CPU_LIMIT}
@@ -137,30 +137,33 @@ objects:
   - kind: ImageStream
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}
+      name: ${APP_NAME}-${ROLE_NAME}-deploy
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
-        description: Keeps track of changes to the final runtime image
-    labels:
-      name: ${APP_NAME}-${ROLE_NAME}
-      app: ${APP_NAME}
-      role: ${ROLE_NAME}
-      env: ${ENV_NAME}
+        description: Keeps track of changes to the final runtime deploy image
+      labels:
+        name: ${APP_NAME}-${ROLE_NAME}-deploy
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
+    spec:
+      lookupPolicy:
+        local: true
 
   # The build config that will be created and be named for the branch you created it for.
   # See https://docs.openshift.com/container-platform/4.8/cicd/builds/advanced-build-operations.html#builds-chaining-builds_advanced-build-operations
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}.${GIT_REF}
+      name: ${APP_NAME}-${ROLE_NAME}-runtime.${GIT_REF}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         description: This (final) build takes the generated base artifacts and serves them through a runtime container
-    labels:
-      name: ${APP_NAME}-${ROLE_NAME}.${GIT_REF}
-      app: ${APP_NAME}
-      role: ${ROLE_NAME}
-      env: ${ENV_NAME}
+      labels:
+        name: ${APP_NAME}-${ROLE_NAME}-runtime.${GIT_REF}
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
     spec:
       runPolicy: Parallel
       completionDeadlineSeconds: 1800
@@ -177,7 +180,7 @@ objects:
         images:
           - from:
               kind: ImageStreamTag
-              name: ${APP_NAME}-${ROLE_NAME}-base:${OUTPUT_IMAGE_TAG}
+              name: ${APP_NAME}-${ROLE_NAME}-build:${OUTPUT_IMAGE_TAG}
             paths:
               - destinationDir: tmp
                 sourcePath: "/opt/app-root/."
@@ -190,7 +193,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: ${APP_NAME}-${ROLE_NAME}:${OUTPUT_IMAGE_TAG}
+          name: ${APP_NAME}-${ROLE_NAME}-deploy:${OUTPUT_IMAGE_TAG}
       resources:
         limits:
           cpu: ${CPU_LIMIT}
