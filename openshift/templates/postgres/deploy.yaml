@@ -118,7 +118,11 @@ objects:
                   mountPath: /run/secrets/postgres_password
                   subPath: postgres_password
                 - name: database-volume
-                  mountPath: /postgresql
+                  mountPath: /var/lib/postgresql
+                  subPath: postgres-data
+                - name: database-volume
+                  mountPath: /var/run
+                  subPath: postgres-run
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
