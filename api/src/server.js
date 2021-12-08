@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const port = process.env.SERVER_PORT || 8080;
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('../swagger.json');
 const audit = require('express-request-audit');
 const winston = require('winston');
 
